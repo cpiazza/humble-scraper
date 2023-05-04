@@ -19,12 +19,13 @@ archive_links.each do |month_link|
 
     post_page = Nokogiri::HTML(URI.open(post_link))
     entry_body = post_page.css('div.entry-body')
+    entry_more = post_page.css('div.entry-more')
 
     file_name = post_link.to_s.split('/').last
 
     Dir.mkdir(dir)
 
-    File.open("#{dir}/#{file_name}", 'wb') { |f| f.write(entry_body) }
+    File.open("#{dir}/#{file_name}", 'wb') { |f| f.write(entry_body.inner_html + entry_more.inner_html) }
 
     image_tags = entry_body.css('img')
     image_tags.each_with_index do |image_tag, index|
